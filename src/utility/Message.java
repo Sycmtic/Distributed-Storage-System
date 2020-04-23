@@ -31,3 +31,4 @@ public abstract class Message implements Serializable {
         return this.errorMessage;
     }
 }
+
