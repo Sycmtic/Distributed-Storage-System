@@ -1,87 +1,37 @@
 package server;
 
-import utility.*;
+import utility.ClientMessage;
+import utility.LogInMessage;
+import utility.ServerMessage;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.*;
-import service.*;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 
-public class Server implements Remote {
-    // server port number
-    int port = 8080;
-    // port numbers of the whole distributed system
-    List<Integer> ports;
-    // port number of failed servers
-    protected Set<Integer> failedServers = new HashSet<>();
-
-    // account database
-    protected AccountDB accountDB;
-    // file database
-    protected FileDB fileDB;
-    // previous promised vote
-    protected ServerMessage previousVote = new ServerMessage();
-
-    // micro service to handle different request
-    // service to get account information
-    AccountService accountService;
-    // service to add a file, change a file content (title) and notify
-    FileService fileService;
-    // service to notify subscribers
-    NotificationService notificationService;
-    // service to share a file
-    ShareService shareService;
-
-    public Server(int port, List<Integer> ports) {
-        this.port = port;
-        this.ports = ports;
-    }
-
-    /*
-     * process the request from the client
+public interface Server extends Remote {
+    /**
+     * The service processes the request
+     *
+     * @param clientMessage request to process
+     * @throws RemoteException remote exception
+     * @return response to the request
      */
-    public Message process(Message message) throws RemoteException {
-        switch (message.getOp()) {
-            // -- TO DO: call corresponding service to handle different request
-        }
-        return message;
-    }
+    ClientMessage process(ClientMessage clientMessage) throws RemoteException;
 
-    private void start() {
-        try {
-            Server server = (Server) UnicastRemoteObject.exportObject(this, port);
-            System.out.println("remote object exported");
+    /**
+     * The service processes the login request
+     *
+     * @param logInMessage message from other servers
+     * @throws RemoteException remote exception
+     * @return response to the server
+     */
+    LogInMessage process(LogInMessage logInMessage) throws RemoteException;
 
-            Registry registry = LocateRegistry.createRegistry(port);
-            System.out.println("rmi registry created");
-
-            registry.bind("Server", server);
-            System.out.println("server ready in port: " + port);
-        } catch (Exception e) {
-            System.out.println(e.toString() + "unable to initialize the server");
-        }
-    }
-
-    public static void main(String[] args) {
-        if (args.length == 0) {
-            System.out.println("Please input port numbers of servers");
-        }
-
-        int port = 0;
-        List<Integer> ports = new ArrayList<>();
-        for (int i = 0; i < args.length; i++) {
-            int p = Integer.parseInt(args[i]);
-            if (i == 0) {
-                port = p;
-            } else {
-                ports.add(p);
-            }
-        }
-
-        Server server = new Server(port, ports);
-        server.start();
-    }
+    /**
+     * Process message from other servers
+     *
+     * @param serverMessage message from other servers
+     * @throws RemoteException remote exception
+     * @return response to the server
+     */
+    ServerMessage process(ServerMessage serverMessage) throws RemoteException;
 }

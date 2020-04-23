@@ -31,11 +31,11 @@ public class Client {
 //        updateService = (UpdateService) LocateRegistry.getRegistry(host, port).lookup("UpdateService");
     }
 
-    public Account send (LogInMessage logInMessage) throws RemoteException {
+    public LogInMessage send (LogInMessage logInMessage) throws RemoteException {
         return server.process(logInMessage);
     }
 
-    public ServerMessage send (ClientMessage clientMessage) throws RemoteException {
+    public ClientMessage send (ClientMessage clientMessage) throws RemoteException {
         return server.process (clientMessage);
     }
 
@@ -62,37 +62,44 @@ public class Client {
         while (client.user == null) {
             String username = scanner.nextLine();
             LogInMessage logInMessage = new LogInMessage(username);
-            Account account = client.send(logInMessage);
-            if (account == null) {
-                Logger.warnLog("Not a valid username! Please check your username and try again.");
-            }else {
-                client.user = account;
+            try {
+                LogInMessage response = client.send(logInMessage);
+                if (response.getResult() == Message.Result.FAIL) {
+                    Logger.warnLog("Not a valid username! Please check your username and try again.");
+                }else {
+                    client.user = response.getAccount();
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
         }
         System.out.println("Successfully logged. Here are your files: ");
         ClientMessage clientMessage = new ClientMessage();
         clientMessage.setAction(ClientMessage.Action.LIST);
-        clientMessage.setUser(client.user);
+        clientMessage.setAccount(client.user);
 
-        List<File> files = client.send (clientMessage).getFiles(); //return needs change
-        for (File file : files) {
-            file.printInfo();
-        }
+        try {
+            List<File> files = client.send(clientMessage).getFiles(); //return needs change
+            for (File file : files) {
+                file.printInfo();
+            }
+        } catch (RemoteException e) { }
+
 
         while (true) {
             String command = scanner.nextLine();
             ClientMessage request = generateClientMessage(command);
-            request.setUser(client.user);
+            request.setAccount(client.user);
             if (request != null) {
                 try {
                     Logger.infoLog("Sending request: " + command);
-                    ServerMessage response = client.send(request);
-                    if (response.getAction() == Message.Action.LIST) {
+                    ClientMessage response = client.send(request);
+                    if (response.getAction() == ClientMessage.Action.LIST) {
                         for (File file : response.getFiles()) {
                             file.printInfo();
                         }
                     }else {
-                        Logger.infoLog(response.getMessage());
+                        Logger.infoLog(response.getErrorMessage());
                     }
                 } catch (RemoteException e) {
                     Logger.warnLog("Client send request error!\n" + e.getMessage());
