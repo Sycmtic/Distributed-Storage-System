@@ -54,34 +54,66 @@ public class Client {
         }
 
         System.out.println("Welcome!");
-        System.out.println("Please enter your username to log in: ");
+        System.out.println("Please enter whether you want to login or create a new account:");
         Scanner scanner = new Scanner (System.in);
         while (client.user == null) {
-            String username = scanner.nextLine();
-            LogInMessage logInMessage = new LogInMessage(username);
-            try {
-                LogInMessage response = client.send(logInMessage);
-                if (response.getResult() == Message.Result.FAIL) {
-                    Logger.warnLog("Not a valid username! Please check your username and try again.");
-                }else {
-                    client.user = response.getAccount();
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
+            String action = scanner.nextLine();
+            switch (action) {
+                case "login":
+                    System.out.println("Please enter your username to log in: ");
+                    String username = scanner.nextLine();
+                    LogInMessage logInMessage = new LogInMessage(username);
+                    logInMessage.setAction(LogInMessage.Action.LOGIN);
+                    try {
+                        LogInMessage response = client.send(logInMessage);
+                        if (response.getResult() == Message.Result.FAIL) {
+                            Logger.warnLog("Not a valid username! Please check your username and try again.");
+                        } else {
+                            client.user = response.getAccount();
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "create":
+                    System.out.println("Please enter your new account username: ");
+                    String newUsername = scanner.nextLine();
+                    LogInMessage createMessage = new LogInMessage(newUsername);
+                    createMessage.setAction(LogInMessage.Action.CREATE);
+                    try {
+                        LogInMessage response = client.send(createMessage);
+                        if (response.getResult() == Message.Result.FAIL) {
+                            Logger.warnLog("Not a valid username! Please check your username and try again.");
+                        } else {
+                            System.out.println("here");
+                            client.user = response.getAccount();
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    System.out.print("wrong action, please input [create|login]");
+                    break;
             }
         }
+
         System.out.println("Successfully logged. Retrieving your files... ");
         ClientMessage clientMessage = new ClientMessage();
         clientMessage.setAction(ClientMessage.Action.LIST);
         clientMessage.setAccount(client.user);
 
         try {
-            List<File> files = client.send(clientMessage).getFiles(); //return needs change
-            for (File file : files) {
-                file.printInfo();
-                Thread t = new Thread(new Receiver("file" + file.getId()));
-                t.start();
-                client.receiving.add(file.getId());
+            ClientMessage response = client.send(clientMessage);
+            if (response.getResult() == Message.Result.FAIL) {
+                System.out.println("There is no file under your account");
+            } else {
+                for (File file : response.getFiles()) {
+                    file.printInfo();
+                    Thread t = new Thread(new Receiver("file" + file.getId()));
+                    t.start();
+                    client.receiving.add(file.getId());
+                }
             }
         } catch (RemoteException e) { }
 

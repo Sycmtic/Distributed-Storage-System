@@ -6,6 +6,7 @@ public class ClientMessage extends Message {
     /* Define operation type of the message */
     public enum Action {
         LIST,
+        CREATE,
         UPDATE,
         SHARE,
         ACCEPT, //accept invitation of sharing
@@ -14,7 +15,9 @@ public class ClientMessage extends Message {
     private Account account;
     private Action action;
     private List<File> files;
-    private long fileID;
+    private long fileID; /** used for receiving notification */
+    // used for create action
+    private File file;
 
     public Account getAccount() {
         return this.account;
@@ -46,6 +49,14 @@ public class ClientMessage extends Message {
 
     public void setFileID(long fileID) {
         this.fileID = fileID;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 }
 

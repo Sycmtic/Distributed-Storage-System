@@ -15,14 +15,16 @@ public class ServerNode implements Server {
     // port numbers of the whole distributed system
     List<Integer> ports;
     // port number of failed servers
-    protected Set<Integer> failedServers = new HashSet<>();
+    protected Set<Integer> failedServers;
+    // map of running servers
+    protected Map<Integer, Server> servers;
 
     // account database
     protected AccountDB accountDB;
     // file database
     protected FileDB fileDB;
     // previous promised vote
-    protected ServerMessage previousVote = new ServerMessage();
+    protected ServerMessage previousVote;
 
     // micro service to handle different request
     // service to get account information
@@ -37,9 +39,15 @@ public class ServerNode implements Server {
     public ServerNode(int port, List<Integer> ports) {
         this.port = port;
         this.ports = ports;
-        accountDB = new AccountDB();
+        previousVote = new ServerMessage();
+
+        failedServers = new HashSet<>();
+        servers = new HashMap<>();
         fileDB = new FileDB();
+        accountDB = new AccountDB();
+
         accountService = new AccountService(accountDB, fileDB);
+        fileService = new FileService(port, ports, previousVote, servers, failedServers, fileDB, accountDB);
     }
 
 
@@ -52,6 +60,8 @@ public class ServerNode implements Server {
             // -- TO DO: call corresponding service to handle different request
             case LIST:
                 return accountService.process(message);
+            case CREATE:
+                return fileService.process(message);
             default:
                 break;
         }
@@ -69,10 +79,37 @@ public class ServerNode implements Server {
         return accountService.process(logInMessage);
     }
 
+    /**
+     * process message from other server during paxos algorithm
+     * @param serverMessage message from other servers
+     * @return serverMessage
+     * @throws RemoteException
+     */
     @Override
     public ServerMessage process(ServerMessage serverMessage) throws RemoteException {
-        // -- TO DO: implement paxos algorithm
-        return null;
+        serverMessage = serverMessage.deepCopy();
+        switch (serverMessage.getStatus()) {
+            case PREPARED:
+                System.out.println("Prepared proposal requested from proposer on port:" + serverMessage.getSender());
+                if (serverMessage.getVote() > previousVote.getVote()) {
+                    serverMessage.setStatus(ServerMessage.Status.PROMISE);
+                    serverMessage.setAccountDB(previousVote.getAccountDB());
+                    serverMessage.setFileDB(previousVote.getFileDB());
+                    previousVote.setVote(serverMessage.getVote());
+                }
+                break;
+            case ACCEPTED:
+                System.out.println("Accepted proposal requested from proposer on port:" + serverMessage.getSender());
+                if (serverMessage.getVote() == previousVote.getVote()) {
+                    accountDB = new AccountDB(serverMessage.getAccountDB());
+                    fileDB = new FileDB(serverMessage.getFileDB());
+                    previousVote.setAccountDB(accountDB);
+                    previousVote.setFileDB(fileDB);
+                }
+            default:
+                break;
+        }
+        return serverMessage;
     }
 
     private void start() {
