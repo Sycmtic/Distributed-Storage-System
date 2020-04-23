@@ -4,14 +4,14 @@ import java.util.List;
 
 public class ServerMessage extends Message {
     private List<File> files;
-    private Action action;
+    private Operation operation;
 
     public List<File> getFiles() {
         return files;
     }
 
-    public Action getAction() {
-        return action;
+    public Operation getAction() {
+        return operation;
     }
 
     public String getMessage() {
