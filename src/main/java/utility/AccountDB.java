@@ -16,6 +16,10 @@ public class AccountDB {
         Account le = new Account ("le");
         accounts.put ("le", le);
         le.getFiles().add((long) 100001);
+
+        Account muhan = new Account ("muhan");
+        accounts.put ("muhan", muhan);
+        muhan.getFiles().add((long) 100002);
     }
 
     /**

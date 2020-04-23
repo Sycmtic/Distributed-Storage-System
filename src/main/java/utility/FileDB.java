@@ -9,9 +9,9 @@ public class FileDB {
     private Map<Long, File> files; /** key is file ID */
 
     public FileDB () {
-        files.put ((long)100000, new File((long)100000, "title1"));
-        files.put ((long)100001, new File((long)100001, "title2"));
-        files.put ((long)100002, new File((long)100002, "title3"));
+        files.put ((long)100001, new File((long)100001, "title1"));
+        files.put ((long)100002, new File((long)100002, "title2"));
+        files.put ((long)100003, new File((long)100003, "title3"));
     }
 
     /**
