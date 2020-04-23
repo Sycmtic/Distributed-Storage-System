@@ -21,4 +21,5 @@ public abstract class Message implements Serializable {
     public void setOp(Operation op) {
         this.op = op;
     }
+
 }
