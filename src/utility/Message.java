@@ -3,23 +3,31 @@ package utility;
 import java.io.Serializable;
 
 public abstract class Message implements Serializable {
-    /* Define operation type of the message */
-    public enum Operation {
-        LOGIN,
-        CREATE,
-        MODIFY,
-        ACCOUNT,
-        SHARE
+    /* Define result type of the message:
+       fail: operation is committed with some issues
+       success: operation is committed successfully
+     */
+    public enum Result {
+        FAIL,
+        SUCCESS
     }
 
-    private Operation op;
+    private Result result = Result.SUCCESS;
+    private String errorMessage = "";
 
-    public Operation getOp() {
-        return this.op;
+    public Result getResult() {
+        return this.result;
     }
 
-    public void setOp(Operation op) {
-        this.op = op;
+    public void setResult(Result result) {
+        this.result = result;
     }
 
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public String getErrorMessage() {
+        return this.errorMessage;
+    }
 }
