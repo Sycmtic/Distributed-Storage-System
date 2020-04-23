@@ -7,6 +7,17 @@ public class AccountDB {
     /** key is username */
     private Map<String, Account> accounts = new HashMap<>();
 
+    public AccountDB () {
+        Account melissa = new Account("melissa");
+        accounts.put("melissa", melissa);
+        melissa.getFiles().add((long)100001);
+        melissa.getFiles().add((long)100002);
+
+        Account le = new Account ("le");
+        accounts.put ("le", le);
+        le.getFiles().add((long) 100001);
+    }
+
     /**
      * Get account by username
      * @param username

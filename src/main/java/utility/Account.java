@@ -1,10 +1,17 @@
 package utility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Account {
     private String username;
-    private List<Long> files; /** list of file IDs owned by user */
+    private List<Long> files = new ArrayList<>(); /** list of file IDs owned by user */
+
+    public Account() {}
+
+    public Account (String username) {
+        this.username = username;
+    }
 
     public String getUsername() {
         return this.username;

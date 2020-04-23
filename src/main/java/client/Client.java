@@ -2,20 +2,20 @@ package client;
 
 import server.Server;
 import utility.*;
+import utility.Message;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+
+import static utility.ClientMessage.Action.ACCEPT;
 
 public class Client {
     private String host;
     private int port;
-//    private AccountService accountService;
-//    private FileService fileService;
-//    private UpdateService updateService;
     private Account user;
     private Server server;
+    private Set<Long> receiving = new HashSet<>();
 
     public Client () {}
 
@@ -26,9 +26,6 @@ public class Client {
 
     public void connect() throws Exception {
         server = (Server) LocateRegistry.getRegistry(host, port).lookup("Server");
-//        accountService = (AccountService) LocateRegistry.getRegistry(host, port).lookup("AccountService");
-//        fileService = (FileService) LocateRegistry.getRegistry(host, port).lookup("FileService");
-//        updateService = (UpdateService) LocateRegistry.getRegistry(host, port).lookup("UpdateService");
     }
 
     public LogInMessage send (LogInMessage logInMessage) throws RemoteException {
@@ -73,7 +70,7 @@ public class Client {
                 e.printStackTrace();
             }
         }
-        System.out.println("Successfully logged. Here are your files: ");
+        System.out.println("Successfully logged. Retrieving your files... ");
         ClientMessage clientMessage = new ClientMessage();
         clientMessage.setAction(ClientMessage.Action.LIST);
         clientMessage.setAccount(client.user);
@@ -82,15 +79,21 @@ public class Client {
             List<File> files = client.send(clientMessage).getFiles(); //return needs change
             for (File file : files) {
                 file.printInfo();
+                Thread t = new Thread(new Receiver("file" + file.getId()));
+                t.start();
+                client.receiving.add(file.getId());
             }
         } catch (RemoteException e) { }
 
+        System.out.println("Please type your request..."); //need change the instruction
+        //add an accept share action
 
         while (true) {
             String command = scanner.nextLine();
             ClientMessage request = generateClientMessage(command);
-            request.setAccount(client.user);
-            if (request != null) {
+
+            if (request.getAction() != ACCEPT) {
+                request.setAccount(client.user);
                 try {
                     Logger.infoLog("Sending request: " + command);
                     ClientMessage response = client.send(request);
@@ -103,6 +106,12 @@ public class Client {
                     }
                 } catch (RemoteException e) {
                     Logger.warnLog("Client send request error!\n" + e.getMessage());
+                }
+            } else {
+                if (!client.receiving.contains(request.getFileID())) {
+                    Thread t = new Thread(new Receiver("file" + request.getFileID()));
+                    t.start();
+                    client.receiving.add(request.getFileID());
                 }
             }
         }
@@ -124,8 +133,11 @@ public class Client {
             case "SHARE":
                 message.setAction(ClientMessage.Action.SHARE);
                 break;
+            case "ACCEPT":
+                message.setAction (ClientMessage.Action.ACCEPT);
+                message.setFileID(Long.valueOf(elements[1]));
+                break;
         }
         return message;
     }
-
 }

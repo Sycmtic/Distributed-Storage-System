@@ -7,12 +7,14 @@ public class ClientMessage extends Message {
     public enum Action {
         LIST,
         UPDATE,
-        SHARE
+        SHARE,
+        ACCEPT, //accept invitation of sharing
     }
 
     private Account account;
     private Action action;
     private List<File> files;
+    private long fileID;
 
     public Account getAccount() {
         return this.account;
@@ -36,6 +38,14 @@ public class ClientMessage extends Message {
 
     public void setFiles(List<File> files) {
         this.files = files;
+    }
+
+    public long getFileID() {
+        return fileID;
+    }
+
+    public void setFileID(long fileID) {
+        this.fileID = fileID;
     }
 }
 

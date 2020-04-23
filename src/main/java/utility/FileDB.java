@@ -5,7 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 public class FileDB {
+    private long prevID = 111111;
     private Map<Long, File> files; /** key is file ID */
+
+    public FileDB () {
+        files.put ((long)100000, new File((long)100000, "title1"));
+        files.put ((long)100001, new File((long)100001, "title2"));
+        files.put ((long)100002, new File((long)100002, "title3"));
+    }
 
     /**
      * get files by list of file ids
