@@ -1,11 +1,24 @@
 package utility;
 
-public class Message {
-    private String type;
+import java.io.Serializable;
 
-    public Message() {}
+public abstract class Message implements Serializable {
+    /* Define operation type of the message */
+    public enum Operation {
+        LOGIN,
+        CREATE,
+        MODIFY,
+        ACCOUNT,
+        SHARE
+    }
 
-    public String getType() {
-        return this.type;
+    private Operation op;
+
+    public Operation getOp() {
+        return this.op;
+    }
+
+    public void setOp(Operation op) {
+        this.op = op;
     }
 }

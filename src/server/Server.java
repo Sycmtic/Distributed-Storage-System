@@ -23,11 +23,16 @@ public class Server implements Remote {
     // file database
     protected FileDB fileDB;
     // previous promised vote
-    protected Message previousVote = new Message();
+    protected ServerMessage previousVote = new ServerMessage();
 
     // micro service to handle different request
+    // service to get account information
+    AccountService accountService;
+    // service to add a file, change a file content (title) and notify
     FileService fileService;
+    // service to notify subscribers
     NotificationService notificationService;
+    // service to share a file
     ShareService shareService;
 
     public Server(int port, List<Integer> ports) {
@@ -39,7 +44,7 @@ public class Server implements Remote {
      * process the request from the client
      */
     public Message process(Message message) throws RemoteException {
-        switch(message.getType()) {
+        switch (message.getOp()) {
             // -- TO DO: call corresponding service to handle different request
         }
         return message;
