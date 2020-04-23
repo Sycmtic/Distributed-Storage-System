@@ -19,11 +19,22 @@ public class AccountService {
      * @return
      */
     public LogInMessage process(LogInMessage logInMessage) {
-        Account account = accountDB.getAccount(logInMessage.getUsername());
-        if (account == null) {
-            logInMessage.setResult(Message.Result.FAIL);
-        } else {
-            logInMessage.setAccount(account);
+        switch (logInMessage.getAction()) {
+            case LOGIN:
+                Account account = accountDB.getAccount(logInMessage.getUsername());
+                if (account == null) {
+                    logInMessage.setResult(Message.Result.FAIL);
+                } else {
+                    logInMessage.setAccount(account);
+                }
+                break;
+            case CREATE:
+                Account newAccount = accountDB.createAccount(logInMessage.getUsername());
+                logInMessage.setAccount(newAccount);
+                break;
+            default:
+                logInMessage.setResult(Message.Result.FAIL);
+                break;
         }
         return logInMessage;
     }
@@ -35,7 +46,7 @@ public class AccountService {
      */
     public ClientMessage process(ClientMessage message) {
         Account account = message.getAccount();
-        List<File> files = fileDB.getFiles(account.getFiles());
+        List<File> files = fileDB.getFileByIds(account.getFiles());
         if (files == null || files.size() == 0) {
             message.setResult(Message.Result.FAIL);
         } else {
