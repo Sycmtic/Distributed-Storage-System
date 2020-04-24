@@ -6,15 +6,24 @@ import java.util.List;
 import java.util.Map;
 
 public class FileDB {
+    private long lastID = 111111;
     private Map<Long, File> files; /** key is file ID */
 
-    public FileDB() {
+    public FileDB () {
         files = new HashMap<>();
+        files.put ((long)100001, new File((long)100001, "title1"));
+        files.put ((long)100002, new File((long)100002, "title2"));
+        files.put ((long)100003, new File((long)100003, "title3"));
     }
 
     public FileDB(FileDB fileDB) {
         files = new HashMap<>();
         files.putAll(fileDB.getFiles());
+        lastID = fileDB.getLastID();
+    }
+
+    public long getLastID() {
+        return lastID;
     }
 
     public Map<Long, File> getFiles() {
@@ -35,7 +44,8 @@ public class FileDB {
         return list;
     }
 
-    public void addFile(Long id, File file) {
+    public void addFile(long id, File file) {
         files.put(id, file);
+        lastID = id;
     }
 }
