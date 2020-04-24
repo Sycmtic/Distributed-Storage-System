@@ -144,7 +144,11 @@ public class Client {
                     if (response.getResult() != Message.Result.FAIL) {
                         if (response.getAction() == ClientMessage.Action.LIST) {
                             for (File file : response.getFiles()) {
-                                file.printInfo();
+//                                if (file == null) {
+//                                    System.out.println("FILE IS NULL!");
+//                                }else {
+                                    file.printInfo();
+//                                }
                             }
                         } else if (response.getAction() == ClientMessage.Action.CREATE) {
                             client.user = response.getAccount();

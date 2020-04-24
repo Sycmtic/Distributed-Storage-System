@@ -61,6 +61,7 @@ public class ServerNode implements Server {
             case LIST:
                 return accountService.process(message);
             case CREATE:
+                System.out.println("Before file: " + fileDB.getFiles().size());
                 return fileService.process(message);
             default:
                 break;

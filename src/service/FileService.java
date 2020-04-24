@@ -104,8 +104,13 @@ public class FileService {
         if (clientMessage.getAction() == ClientMessage.Action.CREATE) {
 //            long fileId = vote;
             long fileId = fileDB.getLastID() + 1;
+            System.out.println(clientMessage.getAccount().getUsername());
+            System.out.println("Before add: " + proposal.getAccountDB().getAccount(clientMessage.getAccount().getUsername()).getFiles().size());
+            System.out.println("Before add file: " + proposal.getFileDB().getFiles().size());
             proposal.getFileDB().addFile(fileId, clientMessage.getFile());
             proposal.getAccountDB().getAccount(clientMessage.getAccount().getUsername()).addFile(fileId);
+            System.out.println("After add file: " + proposal.getFileDB().getFiles().size());
+            System.out.println("After add: " + proposal.getAccountDB().getAccount(clientMessage.getAccount().getUsername()).getFiles().size());
         } else {
             // -- TO-DO: Add other action handler
         }
@@ -130,6 +135,7 @@ public class FileService {
         previousVote.setAccountDB(proposal.getAccountDB());
         clientMessage.setAccount(accountDB.getAccount(clientMessage.getAccount().getUsername()));
         clientMessage.setResult(Message.Result.SUCCESS);
+        System.out.println("After file: " + clientMessage.getAccount().getFiles().size());
         return clientMessage;
     }
 
