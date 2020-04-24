@@ -6,13 +6,9 @@ import utility.Message;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-<<<<<<< HEAD:src/main/java/client/Client.java
-import java.util.*;
 
-import static utility.ClientMessage.Action.ACCEPT;
-=======
+import java.util.*;
 import java.util.Scanner;
->>>>>>> master:src/client/Client.java
 
 public class Client {
     final static String instruction = "Please type your request...\n" +
@@ -104,11 +100,7 @@ public class Client {
                     }
                     break;
                 default:
-<<<<<<< HEAD:src/main/java/client/Client.java
-                    System.out.print("wrong action, please input [signup|login]");
-=======
                     System.out.print("wrong action, please input [longin|signup]");
->>>>>>> master:src/client/Client.java
                     break;
             }
         }
@@ -132,31 +124,15 @@ public class Client {
             }
         } catch (RemoteException e) { }
 
-<<<<<<< HEAD:src/main/java/client/Client.java
-        System.out.println("Please type your request...\n" +
-                "LIST: list your files\n" +
-                "SHARE <file ID> <username>: share a file with a user\n" +
-                "ACCEPT <file ID>: accept a file share invitation \n" +
-                "UPDATE <file ID> <new title>: update a title for a file\n");
-
-        //need change the instruction
-        //add an accept share action
-=======
         System.out.println(instruction);
->>>>>>> master:src/client/Client.java
 
         while (true) {
             String command = scanner.nextLine();
             ClientMessage request = generateClientMessage(command);
-<<<<<<< HEAD:src/main/java/client/Client.java
-
-            if (request.getAction() != ACCEPT) {
-=======
             if (request == null) {
                 continue;
             }
             if (request.getAction() != ClientMessage.Action.ACCEPT) {
->>>>>>> master:src/client/Client.java
                 request.setAccount(client.user);
                 try {
                     Logger.infoLog("Sending request: " + command);
@@ -229,17 +205,10 @@ public class Client {
                 message.setFileID(Long.valueOf(elements[1]));
                 // more....
                 break;
-<<<<<<< HEAD:src/main/java/client/Client.java
-            case "ACCEPT":
-                message.setAction (ClientMessage.Action.ACCEPT);
-                message.setFileID(Long.valueOf(elements[1]));
-                break;
-=======
             default:
                 Logger.warnLog("Please enter a valid command!");
                 System.out.println(instruction);
                 return null;
->>>>>>> master:src/client/Client.java
         }
         return message;
     }
