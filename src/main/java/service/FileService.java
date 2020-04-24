@@ -129,8 +129,6 @@ public class FileService {
         fileDB = new FileDB(proposal.getFileDB());
         previousVote.setFileDB(proposal.getFileDB());
         previousVote.setAccountDB(proposal.getAccountDB());
-//        System.out.println("after: " + fileDB.getFiles().size());
-//        System.out.println("after user: " + accountDB.getAccount(clientMessage.getAccount().getUsername()).getFiles().size());
         clientMessage.setAccount(accountDB.getAccount(clientMessage.getAccount().getUsername()));
         clientMessage.setResult(Message.Result.SUCCESS);
         return clientMessage;
