@@ -46,7 +46,7 @@ public class ServerNode implements Server {
         fileDB = new FileDB();
         accountDB = new AccountDB();
 
-        accountService = new AccountService(accountDB, fileDB);
+        accountService = new AccountService(port, ports, previousVote, servers, failedServers, fileDB, accountDB);
         fileService = new FileService(port, ports, previousVote, servers, failedServers, fileDB, accountDB);
     }
 

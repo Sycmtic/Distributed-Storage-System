@@ -1,16 +1,31 @@
 package service;
 
+import server.Server;
 import utility.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class AccountService {
-    protected AccountDB accountDB;
-    protected FileDB fileDB;
+    List<Integer> ports;
+    int port;
+    ServerMessage previousVote;
+    Map<Integer, Server> servers;
+    Set<Integer> failedServers;
+    FileDB fileDB;
+    AccountDB accountDB;
 
-    public AccountService(AccountDB accountDB, FileDB fileDb) {
+    public AccountService(int port, List<Integer> ports, ServerMessage previousVote,
+                          Map<Integer, Server> servers, Set<Integer> failedServers,
+                          FileDB fileDB, AccountDB accountDB) {
+        this.port = port;
+        this.ports = ports;
+        this.previousVote = previousVote;
+        this.servers = servers;
+        this.fileDB = fileDB;
         this.accountDB = accountDB;
-        this.fileDB = fileDb;
+        this.failedServers = failedServers;
     }
 
     /**
