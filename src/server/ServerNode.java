@@ -333,8 +333,12 @@ public class ServerNode implements Server {
             proposal.getAccountDB().getAccount(clientMessage.getAccount().getUsername()).addFile(fileId);
         } else if (clientMessage.getAction() == ClientMessage.Action.UPDATE) {
             File file = proposal.getFileDB().getFileById(clientMessage.getFileID());
-            file.setContent(clientMessage.getNewContent());
-            file.setVersion(file.getVersion() + 1);
+            if (file == null) {
+                clientMessage.setResult(Message.Result.FAIL);
+            } else {
+                file.setContent(clientMessage.getNewContent());
+                file.setVersion(file.getVersion() + 1);
+            }
         }
 
         // multi-cast the proposal
@@ -356,7 +360,6 @@ public class ServerNode implements Server {
         previousVote.setFileDB(proposal.getFileDB());
         previousVote.setAccountDB(proposal.getAccountDB());
         clientMessage.setAccount(accountDB.getAccount(clientMessage.getAccount().getUsername()));
-        clientMessage.setResult(Message.Result.SUCCESS);
         return clientMessage;
     }
 
