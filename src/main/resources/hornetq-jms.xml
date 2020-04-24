@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<configuration xsi:schemaLocation="urn:hornetq /schema/hornetq-jms.xsd"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:hornetq">
+   <!--the connection factory used by the example -->
+   <connection-factory name="myConnectionFactory">
+      <connectors>
+         <connector-ref connector-name="netty-connector" />
+      </connectors>
+      <entries>
+         <entry name="myConnectionFactory" />
+      </entries>
+   </connection-factory>
+   <queue name="user1">
+      <entry name="user1" />
+   </queue>
+   <queue name="user2">
+      <entry name="user2" />
+   </queue>
+   <queue name="user3">
+      <entry name="user3" />
+   </queue>
+   <queue name="user4">
+      <entry name="user4" />
+   </queue>
+   <queue name="user5">
+      <entry name="user5" />
+   </queue>
+   <queue name="melissa">
+      <entry name="melissa" />
+   </queue>
+   <queue name="mmmmel">
+      <entry name="mmmmel" />
+   </queue>
+   <queue name="yongle">
+      <entry name="yongle" />
+   </queue>
+   <queue name="muhan">
+      <entry name="muhan" />
+   </queue>
+</configuration>
