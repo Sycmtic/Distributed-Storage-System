@@ -128,7 +128,9 @@ public class FileService {
         fileDB = new FileDB(proposal.getFileDB());
         previousVote.setFileDB(proposal.getFileDB());
         previousVote.setAccountDB(proposal.getAccountDB());
-        return new ClientMessage();
+        clientMessage.setAccount(accountDB.getAccount(clientMessage.getAccount().getUsername()));
+        clientMessage.setResult(Message.Result.SUCCESS);
+        return clientMessage;
     }
 
     /**

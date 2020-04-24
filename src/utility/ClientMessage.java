@@ -75,5 +75,9 @@ public class ClientMessage extends Message {
     public void setNewContent(String newContent) {
         this.newContent = newContent;
     }
+
+    public void printMessage() {
+        System.out.println(this.getResult() + " to " + this.getAction());
+    }
 }
 
