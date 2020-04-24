@@ -130,8 +130,26 @@ public class FileService {
         previousVote.setFileDB(proposal.getFileDB());
         previousVote.setAccountDB(proposal.getAccountDB());
         clientMessage.setAccount(accountDB.getAccount(clientMessage.getAccount().getUsername()));
+        clientMessage.setAccountDB(accountDB);
+        clientMessage.setFileDB(fileDB);
         clientMessage.setResult(Message.Result.SUCCESS);
         return clientMessage;
+    }
+
+    /**
+     * List files of current user
+     * @param message
+     * @return
+     */
+    public ClientMessage processList (ClientMessage message) {
+        Account account = message.getAccount();
+        List<File> files = fileDB.getFileByIds(account.getFiles());
+        if (files == null) {
+            message.setResult(Message.Result.FAIL);
+        } else {
+            message.setFiles(files);
+        }
+        return message;
     }
 
     /**

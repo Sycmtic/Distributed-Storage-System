@@ -8,7 +8,9 @@ public class Account implements Serializable {
     private String username;
     private List<Long> files; /** list of file IDs owned by user */
 
-    public Account() {}
+    public Account() {
+        files = new ArrayList<>();
+    }
 
     public Account(String username) {
         this.username = username;
@@ -24,6 +26,9 @@ public class Account implements Serializable {
     }
 
     public void addFile(long fileId) {
+        if(files == null) {
+            files = new ArrayList<>();
+        }
         files.add(fileId);
     }
 }

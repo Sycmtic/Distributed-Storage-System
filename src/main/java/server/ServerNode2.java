@@ -9,7 +9,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class ServerNode implements Server {
+public class ServerNode2 implements Server {
     // server port number
     int port = 8080;
     // port numbers of the whole distributed system
@@ -36,7 +36,7 @@ public class ServerNode implements Server {
     // service to share a file
     ShareService shareService;
 
-    public ServerNode(int port, List<Integer> ports) {
+    public ServerNode2(int port, List<Integer> ports) {
         this.port = port;
         this.ports = ports;
         previousVote = new ServerMessage();
@@ -47,6 +47,7 @@ public class ServerNode implements Server {
         accountDB = new AccountDB();
         notificationService = new NotificationService();
     }
+
 
     /**
      * process the request from the client
@@ -66,7 +67,7 @@ public class ServerNode implements Server {
             case SHARE:
                 shareService = new ShareService(accountDB, fileDB, message.getUsername(), message.getFileID());
                 response = shareService.process(message);
-                notificationService.sendNotification("File " + message.getFileID() + " is shared with you", response.getFileID());
+                notificationService.sendNotification("File " + message.getFile().getId() + " is shared with you", response.getFileID());
                 return response;
             default:
                 break;
@@ -150,7 +151,7 @@ public class ServerNode implements Server {
             }
         }
 
-        ServerNode serverNode = new ServerNode(port, ports);
+        ServerNode2 serverNode = new ServerNode2(port, ports);
         serverNode.start();
     }
 }
