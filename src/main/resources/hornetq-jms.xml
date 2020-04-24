@@ -25,4 +25,23 @@
    <queue name="file100005">
       <entry name="file100005" />
    </queue>
+   <queue name="file100006">
+      <entry name="file100006" />
+   </queue>
+   <queue name="file100007">
+      <entry name="file100007" />
+   </queue>
+   <queue name="file100008">
+      <entry name="file100008" />
+   </queue>
+   <queue name="file100009">
+      <entry name="file100009" />
+   </queue>
+   <queue name="file100010">
+      <entry name="file100010" />
+   </queue>
+   <queue name="file100011">
+      <entry name="file100011" />
+   </queue>
+
 </configuration>

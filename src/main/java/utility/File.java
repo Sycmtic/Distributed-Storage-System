@@ -1,18 +1,20 @@
 package utility;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class File {
+public class File implements Serializable {
     private long id; /** file id */
     private int version = 1; /** file version */
     private String title; /** file title */
     private String content = ""; /** file content */
     private List<String> owners = new ArrayList<>(); /** owners' usernames */
 
-    public File (long id, String title) {
+    public File (long id, String title, String content) {
         this.id = id;
         this.title = title;
+        this.content = content;
     }
 
     public File (String title, String content) {
@@ -22,6 +24,10 @@ public class File {
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getVersion() {

@@ -73,9 +73,10 @@ public class Client {
                     logInMessage.setAction(LogInMessage.Action.LOGIN);
                     try {
                         LogInMessage response = client.send(logInMessage);
-                        if (response.getResult() == Message.Result.FAIL) {
+                        if (response.getResult() == Message.Result.FAIL || response.getAccount() == null) {
                             Logger.warnLog("Not a valid username! Please check your username and try again.");
                         } else {
+                            Logger.infoLog("Successfully logged in.");
                             client.user = response.getAccount();
                         }
                     } catch (RemoteException e) {
@@ -105,14 +106,14 @@ public class Client {
             }
         }
 
-        System.out.println("Successfully logged. Retrieving your files... ");
+        System.out.println("Retrieving your files... ");
         ClientMessage clientMessage = new ClientMessage();
         clientMessage.setAction(ClientMessage.Action.LIST);
         clientMessage.setAccount(client.user);
 
         try {
             ClientMessage response = client.send(clientMessage);
-            if (response.getResult() == Message.Result.FAIL) {
+            if (response.getResult() == Message.Result.FAIL || response.getFiles().size() == 0) {
                 System.out.println("There is no file under your account");
             } else {
                 for (File file : response.getFiles()) {
@@ -122,27 +123,40 @@ public class Client {
                     client.receiving.add(file.getId());
                 }
             }
-        } catch (RemoteException e) { }
+        } catch (RemoteException e) {
+            Logger.warnLog(e.getMessage());
+        }
 
         System.out.println(instruction);
 
+        //Start to take request from client
         while (true) {
             String command = scanner.nextLine();
             ClientMessage request = generateClientMessage(command);
+            //invalid command
             if (request == null) {
                 continue;
             }
+
             if (request.getAction() != ClientMessage.Action.ACCEPT) {
                 request.setAccount(client.user);
                 try {
                     Logger.infoLog("Sending request: " + command);
                     ClientMessage response = client.send(request);
-                    if (response.getAction() == ClientMessage.Action.LIST) {
-                        for (File file : response.getFiles()) {
-                            file.printInfo();
+                    response.printMessage();
+                    if (response.getResult() != Message.Result.FAIL) {
+                        if (response.getAction() == ClientMessage.Action.LIST) {
+                            for (File file : response.getFiles()) {
+                                file.printInfo();
+                            }
+                        } else if (response.getAction() == ClientMessage.Action.CREATE) {
+                            client.user = response.getAccount();
+                            Thread t = new Thread(new Receiver("file" + response.getFileID()));
+                            t.start();
+                            client.receiving.add(response.getFileID());
+                        } else {
+                            Logger.infoLog(response.getErrorMessage());
                         }
-                    }else {
-                        Logger.infoLog(response.getErrorMessage());
                     }
                 } catch (RemoteException e) {
                     Logger.warnLog("Client send request error!\n" + e.getMessage());
@@ -174,6 +188,7 @@ public class Client {
                 }
                 message.setAction(ClientMessage.Action.CREATE);
                 File newFile = new File(elements[1], elements[2]);
+                message.setFile(newFile);
                 break;
             case "UPDATE":
                 if (elements.length < 3) {

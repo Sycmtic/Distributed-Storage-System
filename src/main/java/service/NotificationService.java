@@ -4,6 +4,7 @@ import org.hornetq.api.core.TransportConfiguration;
 import org.hornetq.api.jms.HornetQJMSClient;
 import org.hornetq.integration.transports.netty.NettyConnectorFactory;
 import org.hornetq.integration.transports.netty.TransportConstants;
+import utility.Logger;
 
 import javax.jms.*;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class NotificationService {
             msg.setText(message);
             //Send message
             sender.send(msg);
-            System.out.println("Notification successfully sent.");
+            Logger.infoLog("Notification successfully sent.");
 
             //Close connection
             queueSess.close();

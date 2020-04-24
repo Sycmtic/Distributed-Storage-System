@@ -47,6 +47,7 @@ public class AccountService {
     public ClientMessage process(ClientMessage message) {
         Account account = message.getAccount();
         List<File> files = fileDB.getFileByIds(account.getFiles());
+        //change to search by account username
         if (files == null || files.size() == 0) {
             message.setResult(Message.Result.FAIL);
         } else {

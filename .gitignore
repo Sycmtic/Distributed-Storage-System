@@ -2,3 +2,5 @@
 .DS_STORE
 out/
 target/
+data/
+

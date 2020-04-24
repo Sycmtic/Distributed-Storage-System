@@ -62,7 +62,9 @@ public class ServerNode implements Server {
             case LIST:
                 return accountService.process(message);
             case CREATE:
-                return fileService.process(message);
+                ClientMessage response = fileService.process(message);
+                notificationService.sendNotification("File " + message.getFile().getTitle() + " is created for you", response.getFileID());
+                return response;
             default:
                 break;
         }

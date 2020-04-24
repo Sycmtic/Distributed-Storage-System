@@ -104,6 +104,7 @@ public class FileService {
         if (clientMessage.getAction() == ClientMessage.Action.CREATE) {
 //            long fileId = vote;
             long fileId = fileDB.getLastID() + 1;
+            clientMessage.setFileID(fileId);
             proposal.getFileDB().addFile(fileId, clientMessage.getFile());
             proposal.getAccountDB().getAccount(clientMessage.getAccount().getUsername()).addFile(fileId);
         } else {
@@ -128,7 +129,11 @@ public class FileService {
         fileDB = new FileDB(proposal.getFileDB());
         previousVote.setFileDB(proposal.getFileDB());
         previousVote.setAccountDB(proposal.getAccountDB());
-        return new ClientMessage();
+//        System.out.println("after: " + fileDB.getFiles().size());
+//        System.out.println("after user: " + accountDB.getAccount(clientMessage.getAccount().getUsername()).getFiles().size());
+        clientMessage.setAccount(accountDB.getAccount(clientMessage.getAccount().getUsername()));
+        clientMessage.setResult(Message.Result.SUCCESS);
+        return clientMessage;
     }
 
     /**
