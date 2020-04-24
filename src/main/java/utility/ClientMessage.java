@@ -9,15 +9,16 @@ public class ClientMessage extends Message {
         CREATE,
         UPDATE,
         SHARE,
-        ACCEPT, //accept invitation of sharing
+        ACCEPT,
     }
 
     private Account account;
     private Action action;
     private List<File> files;
-    private long fileID; /** used for receiving notification */
-    // used for create action
-    private File file;
+    private long fileID; /** used for receiving notification or share a file*/
+    private File file;/** used for create action */
+    private String username;/** used for user to share */
+    private String newContent; /** used for update content */
 
     public Account getAccount() {
         return this.account;
@@ -57,6 +58,22 @@ public class ClientMessage extends Message {
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getNewContent() {
+        return newContent;
+    }
+
+    public void setNewContent(String newContent) {
+        this.newContent = newContent;
     }
 }
 

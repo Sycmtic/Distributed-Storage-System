@@ -15,6 +15,11 @@ public class File {
         this.title = title;
     }
 
+    public File (String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
     public long getId() {
         return id;
     }
