@@ -1,11 +1,12 @@
 package utility;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FileDB {
+public class FileDB implements Serializable {
     private long lastID = 100003;
     private Map<Long, File> files; /** key is file ID */
 
@@ -40,6 +41,10 @@ public class FileDB {
         for (long id : fileIds) {
             // -- TO DO handle the case if there is no specific file id in files
             list.add(files.get(id));
+            System.out.println(id);
+            if (files.get(id) == null) {
+                System.out.println("Got a null file!");
+            }
         }
         return list;
     }
