@@ -102,12 +102,12 @@ public class FileService {
         }
         proposal.setVote(vote);
         if (clientMessage.getAction() == ClientMessage.Action.CREATE) {
-//            long fileId = vote;
             long fileId = fileDB.getLastID() + 1;
             proposal.getFileDB().addFile(fileId, clientMessage.getFile());
             proposal.getAccountDB().getAccount(clientMessage.getAccount().getUsername()).addFile(fileId);
-        } else {
-            // -- TO-DO: Add other action handler
+        } else if (clientMessage.getAction() == ClientMessage.Action.UPDATE) {
+            File file = proposal.getFileDB().getFileById(clientMessage.getFileID());
+            file.setContent(clientMessage.getNewContent());
         }
 
         // multi-cast the proposal

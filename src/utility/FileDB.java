@@ -1,11 +1,12 @@
 package utility;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FileDB {
+public class FileDB implements Serializable {
     private long lastID = 100003;
     private Map<Long, File> files; /** key is file ID */
 
@@ -48,5 +49,9 @@ public class FileDB {
         file.setId(id);
         files.put(id, file);
         lastID = id;
+    }
+
+    public File getFileById(long id) {
+        return files.get(id);
     }
 }

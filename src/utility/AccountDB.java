@@ -1,9 +1,10 @@
 package utility;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.HashMap;
 
-public class AccountDB {
+public class AccountDB implements Serializable {
     /** key is username */
     private Map<String, Account> accounts = new HashMap<>();
 
