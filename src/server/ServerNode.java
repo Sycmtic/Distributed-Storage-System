@@ -334,6 +334,7 @@ public class ServerNode implements Server {
         } else if (clientMessage.getAction() == ClientMessage.Action.UPDATE) {
             File file = proposal.getFileDB().getFileById(clientMessage.getFileID());
             file.setContent(clientMessage.getNewContent());
+            file.setVersion(file.getVersion() + 1);
         }
 
         // multi-cast the proposal
