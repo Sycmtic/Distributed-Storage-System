@@ -6,6 +6,7 @@ public class ClientMessage extends Message {
     /* Define operation type of the message */
     public enum Action {
         LIST,
+        CREATE,
         UPDATE,
         SHARE
     }
@@ -13,6 +14,8 @@ public class ClientMessage extends Message {
     private Account account;
     private Action action;
     private List<File> files;
+    // used for create action
+    private File file;
 
     public Account getAccount() {
         return this.account;
@@ -36,6 +39,14 @@ public class ClientMessage extends Message {
 
     public void setFiles(List<File> files) {
         this.files = files;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 }
 
