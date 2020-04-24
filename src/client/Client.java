@@ -16,7 +16,6 @@ public class Client {
             "OPEN <file ID>: open your file to view the content\n" +
             "CREATE <file title> <file content>: create a file with a title and content\n" +
             "SHARE <file ID> <username>: share a file with a user\n" +
-            "ACCEPT <file ID>: accept a file share invitation \n" +
             "UPDATE <file ID> <new content>: update content for a file\n";
 
     private String host;
@@ -216,16 +215,6 @@ public class Client {
                 message.setAction(ClientMessage.Action.SHARE);
                 message.setFileID(Long.valueOf(elements[1]));
                 message.setUsername(elements[2]);
-                break;
-            case "ACCEPT":
-                if (elements.length < 2) {
-                    Logger.warnLog("Please enter a valid command!");
-                    System.out.println("ACCEPT <file ID>: accept a file share invitation");
-                    return null;
-                }
-                message.setAction (ClientMessage.Action.ACCEPT);
-                message.setFileID(Long.valueOf(elements[1]));
-                // more....
                 break;
             default:
                 Logger.warnLog("Please enter a valid command!");
