@@ -102,7 +102,8 @@ public class FileService {
         }
         proposal.setVote(vote);
         if (clientMessage.getAction() == ClientMessage.Action.CREATE) {
-            long fileId = vote;
+//            long fileId = vote;
+            long fileId = fileDB.getLastID() + 1;
             proposal.getFileDB().addFile(fileId, clientMessage.getFile());
             proposal.getAccountDB().getAccount(clientMessage.getAccount().getUsername()).addFile(fileId);
         } else {

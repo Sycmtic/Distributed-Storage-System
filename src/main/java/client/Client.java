@@ -54,7 +54,7 @@ public class Client {
         }
 
         System.out.println("Welcome!");
-        System.out.println("Please enter whether you want to login or create a new account:");
+        System.out.println("Please enter \"login\" or \"signup\":");
         Scanner scanner = new Scanner (System.in);
         while (client.user == null) {
             String action = scanner.nextLine();
@@ -75,7 +75,7 @@ public class Client {
                         e.printStackTrace();
                     }
                     break;
-                case "create":
+                case "signup":
                     System.out.println("Please enter your new account username: ");
                     String newUsername = scanner.nextLine();
                     LogInMessage createMessage = new LogInMessage(newUsername);
@@ -93,7 +93,7 @@ public class Client {
                     }
                     break;
                 default:
-                    System.out.print("wrong action, please input [create|login]");
+                    System.out.print("wrong action, please input [signup|login]");
                     break;
             }
         }
@@ -117,7 +117,13 @@ public class Client {
             }
         } catch (RemoteException e) { }
 
-        System.out.println("Please type your request..."); //need change the instruction
+        System.out.println("Please type your request...\n" +
+                "LIST: list your files\n" +
+                "SHARE <file ID> <username>: share a file with a user\n" +
+                "ACCEPT <file ID>: accept a file share invitation \n" +
+                "UPDATE <file ID> <new title>: update a title for a file\n");
+
+        //need change the instruction
         //add an accept share action
 
         while (true) {

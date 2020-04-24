@@ -8,7 +8,7 @@ import org.hornetq.jms.server.JMSServerManager;
 import org.hornetq.jms.server.impl.JMSServerManagerImpl;
 
 public class NotificationHQServer {
-    public void startServer() {
+    public static void startServer() {
         try
         {
             FileConfiguration configuration = new FileConfiguration();
@@ -27,5 +27,8 @@ public class NotificationHQServer {
             System.out.println("Server starting failed!");
             e.printStackTrace();
         }
+    }
+    public static void main (String[] args) {
+        startServer();
     }
 }

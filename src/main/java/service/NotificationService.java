@@ -4,25 +4,17 @@ import org.hornetq.api.core.TransportConfiguration;
 import org.hornetq.api.jms.HornetQJMSClient;
 import org.hornetq.integration.transports.netty.NettyConnectorFactory;
 import org.hornetq.integration.transports.netty.TransportConstants;
-import utility.File;
-import utility.Listener;
-import utility.NotificationHQServer;
 
 import javax.jms.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class NotificationService {
-    NotificationHQServer hqServer;
 
-    public NotificationService () {
-        hqServer = new NotificationHQServer();
-        hqServer.startServer();
-    }
+    public NotificationService () {}
 
     /**
      * After share a file with another user, a message queue named by this file ID is created
-     * A server message
      */
     public void sendNotification (String message, long fileID) {
         try {

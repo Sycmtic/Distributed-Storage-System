@@ -36,6 +36,6 @@ public class File {
     }
 
     public void printInfo () {
-        System.out.println(this.title + "   v: " + this.version);
+        System.out.println("File ID: " + this.id + " Title: " + this.title + "   Version: " + this.version);
     }
 }

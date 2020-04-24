@@ -48,6 +48,7 @@ public class ServerNode implements Server {
 
         accountService = new AccountService(accountDB, fileDB);
         fileService = new FileService(port, ports, previousVote, servers, failedServers, fileDB, accountDB);
+        notificationService = new NotificationService();
     }
 
 
@@ -128,6 +129,7 @@ public class ServerNode implements Server {
     public static void main(String[] args) {
         if (args.length == 0) {
             System.out.println("Please input port numbers of servers");
+            System.exit(1);
         }
 
         int port = 0;
