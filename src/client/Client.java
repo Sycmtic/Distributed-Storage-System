@@ -13,6 +13,7 @@ import java.util.Scanner;
 public class Client {
     final static String instruction = "Please type your request...\n" +
             "LIST: list your files\n" +
+            "OPEN <file ID>: open your file to view the content\n" +
             "CREATE <file title> <file content>: create a file with a title and content\n" +
             "SHARE <file ID> <username>: share a file with a user\n" +
             "ACCEPT <file ID>: accept a file share invitation \n" +
@@ -101,7 +102,7 @@ public class Client {
                     }
                     break;
                 default:
-                    System.out.print("wrong action, please input [longin|signup]");
+                    System.out.println("wrong action, please input [login|signup]");
                     break;
             }
         }
@@ -160,6 +161,8 @@ public class Client {
                             }
                         } else if (response.getAction() == ClientMessage.Action.CREATE) {
                             client.user = response.getAccount();
+                        } else if (response.getAction() == ClientMessage.Action.OPEN) {
+                            response.getFile().printContent();
                         } else {
                             Logger.infoLog(response.getErrorMessage());
                         }
@@ -179,6 +182,10 @@ public class Client {
         switch (action) {
             case "LIST":
                 message.setAction(ClientMessage.Action.LIST);
+                break;
+            case "OPEN":
+                message.setAction(ClientMessage.Action.OPEN);
+                message.setFileID(Long.valueOf(elements[1]));
                 break;
             case "CREATE":
                 if (elements.length < 3) {

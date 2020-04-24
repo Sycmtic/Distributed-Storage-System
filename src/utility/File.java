@@ -38,8 +38,16 @@ public class File implements Serializable {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getContent() {
         return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public List<String> getOwners() {
@@ -48,5 +56,9 @@ public class File implements Serializable {
 
     public void printInfo () {
         System.out.println("File ID: " + this.id + " Title: " + this.title + "   Version: " + this.version);
+    }
+
+    public void printContent() {
+        System.out.println(content);
     }
 }

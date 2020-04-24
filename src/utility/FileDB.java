@@ -54,4 +54,8 @@ public class FileDB implements Serializable {
         files.put(id, file);
         lastID = id;
     }
+
+    public File getFileById(long id) {
+        return files.get(id);
+    }
 }

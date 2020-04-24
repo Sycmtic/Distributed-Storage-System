@@ -6,6 +6,7 @@ public class ClientMessage extends Message {
     /* Define operation type of the message */
     public enum Action {
         LIST,
+        OPEN,
         CREATE,
         UPDATE,
         SHARE,
