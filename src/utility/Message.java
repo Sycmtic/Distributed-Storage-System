@@ -14,6 +14,8 @@ public abstract class Message implements Serializable {
 
     private Result result = Result.SUCCESS;
     private String errorMessage = "";
+    FileDB fileDB;
+    AccountDB accountDB;
 
     public Result getResult() {
         return this.result;
@@ -29,6 +31,22 @@ public abstract class Message implements Serializable {
 
     public String getErrorMessage() {
         return this.errorMessage;
+    }
+
+    public FileDB getFileDB() {
+        return fileDB;
+    }
+
+    public void setFileDB(FileDB fileDB) {
+        this.fileDB = fileDB;
+    }
+
+    public AccountDB getAccountDB() {
+        return accountDB;
+    }
+
+    public void setAccountDB(AccountDB accountDB) {
+        this.accountDB = accountDB;
     }
 }
 

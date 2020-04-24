@@ -45,9 +45,6 @@ public class ServerNode implements Server {
         servers = new HashMap<>();
         fileDB = new FileDB();
         accountDB = new AccountDB();
-
-        accountService = new AccountService(accountDB, fileDB);
-        fileService = new FileService(port, ports, previousVote, servers, failedServers, fileDB, accountDB);
     }
 
 
@@ -56,12 +53,18 @@ public class ServerNode implements Server {
      */
     @Override
     public ClientMessage process(ClientMessage message) throws RemoteException {
+        ClientMessage response = null;
+        fileService = new FileService(port, ports, previousVote, servers, failedServers, fileDB, accountDB);
         switch (message.getAction()) {
             // -- TO DO: call corresponding service to handle different request
             case LIST:
-                return accountService.process(message);
+                return fileService.processList(message);
             case CREATE:
                 return fileService.process(message);
+            case SHARE:
+                shareService = new ShareService(accountDB, fileDB, message.getUsername(), message.getFileID());
+                response = shareService.process(message);
+                return response;
             default:
                 break;
         }
@@ -76,7 +79,37 @@ public class ServerNode implements Server {
      */
     @Override
     public LogInMessage process(LogInMessage logInMessage) throws RemoteException {
-        return accountService.process(logInMessage);
+//        return accountService.process(logInMessage);
+        return processAccountService(logInMessage);
+    }
+    /**
+     * process login in request
+     * @param logInMessage
+     * @return
+     */
+    private LogInMessage processAccountService(LogInMessage logInMessage) {
+        switch (logInMessage.getAction()) {
+            case LOGIN:
+                Account account = accountDB.getAccount(logInMessage.getUsername());
+                if (account == null) {
+                    logInMessage.setResult(Message.Result.FAIL);
+                } else {
+                    logInMessage.setAccount(account);
+                }
+                break;
+            case CREATE:
+                if (accountDB.getAccounts().containsKey(logInMessage.getUsername())) {
+                    logInMessage.setResult(Message.Result.FAIL);
+                }else {
+                    Account newAccount = accountDB.createAccount(logInMessage.getUsername());
+                    logInMessage.setAccount(newAccount);
+                }
+                break;
+            default:
+                logInMessage.setResult(Message.Result.FAIL);
+                break;
+        }
+        return logInMessage;
     }
 
     /**

@@ -29,8 +29,12 @@ public class AccountService {
                 }
                 break;
             case CREATE:
-                Account newAccount = accountDB.createAccount(logInMessage.getUsername());
-                logInMessage.setAccount(newAccount);
+                if (accountDB.getAccounts().containsKey(logInMessage.getUsername())) {
+                    logInMessage.setResult(Message.Result.FAIL);
+                }else {
+                    Account newAccount = accountDB.createAccount(logInMessage.getUsername());
+                    logInMessage.setAccount(newAccount);
+                }
                 break;
             default:
                 logInMessage.setResult(Message.Result.FAIL);
