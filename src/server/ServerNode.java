@@ -127,7 +127,8 @@ public class ServerNode implements Server {
 
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.out.println("Please input port numbers of servers");
+            Logger.warnLog("Please input port numbers of servers");
+            System.exit(1);
         }
 
         int port = 0;

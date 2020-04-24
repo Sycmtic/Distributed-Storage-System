@@ -5,15 +5,18 @@ import utility.*;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.util.List;
 import java.util.Scanner;
 
 public class Client {
+    final static String instruction = "Please type your request...\n" +
+            "LIST: list your files\n" +
+            "CREATE <file title> <file content>: create a file with a title and content\n" +
+            "SHARE <file ID> <username>: share a file with a user\n" +
+            "ACCEPT <file ID>: accept a file share invitation \n" +
+            "UPDATE <file ID> <new content>: update content for a file\n";
+
     private String host;
     private int port;
-//    private AccountService accountService;
-//    private FileService fileService;
-//    private UpdateService updateService;
     private Account user;
     private Server server;
 
@@ -26,9 +29,6 @@ public class Client {
 
     public void connect() throws Exception {
         server = (Server) LocateRegistry.getRegistry(host, port).lookup("Server");
-//        accountService = (AccountService) LocateRegistry.getRegistry(host, port).lookup("AccountService");
-//        fileService = (FileService) LocateRegistry.getRegistry(host, port).lookup("FileService");
-//        updateService = (UpdateService) LocateRegistry.getRegistry(host, port).lookup("UpdateService");
     }
 
     public LogInMessage send (LogInMessage logInMessage) throws RemoteException {
@@ -57,7 +57,7 @@ public class Client {
         }
 
         System.out.println("Welcome!");
-        System.out.println("Please enter whether you want to login or create a new account:");
+        System.out.println("Please enter \"login\" or \"signup\":");
         Scanner scanner = new Scanner (System.in);
         while (client.user == null) {
             String action = scanner.nextLine();
@@ -78,7 +78,7 @@ public class Client {
                         e.printStackTrace();
                     }
                     break;
-                case "create":
+                case "signup":
                     System.out.println("Please enter your new account username: ");
                     String newUsername = scanner.nextLine();
                     LogInMessage createMessage = new LogInMessage(newUsername);
@@ -96,12 +96,12 @@ public class Client {
                     }
                     break;
                 default:
-                    System.out.print("wrong action, please input [create|login]");
+                    System.out.print("wrong action, please input [longin|signup]");
                     break;
             }
         }
 
-        System.out.println("Successfully logged. Here are your files: ");
+        System.out.println("Successfully logged. Retrieving your files... ");
         ClientMessage clientMessage = new ClientMessage();
         clientMessage.setAction(ClientMessage.Action.LIST);
         clientMessage.setAccount(client.user);
@@ -117,12 +117,16 @@ public class Client {
             }
         } catch (RemoteException e) { }
 
+        System.out.println(instruction);
 
         while (true) {
             String command = scanner.nextLine();
             ClientMessage request = generateClientMessage(command);
-            request.setAccount(client.user);
-            if (request != null) {
+            if (request == null) {
+                continue;
+            }
+            if (request.getAction() != ClientMessage.Action.ACCEPT) {
+                request.setAccount(client.user);
                 try {
                     Logger.infoLog("Sending request: " + command);
                     ClientMessage response = client.send(request);
@@ -138,7 +142,6 @@ public class Client {
                 }
             }
         }
-
     }
 
     private static ClientMessage generateClientMessage(String command) {
@@ -150,12 +153,49 @@ public class Client {
             case "LIST":
                 message.setAction(ClientMessage.Action.LIST);
                 break;
+            case "CREATE":
+                if (elements.length < 3) {
+                    Logger.warnLog("Please enter a valid command!");
+                    System.out.println("CREATE <file title> <file content>");
+                    return null;
+                }
+                message.setAction(ClientMessage.Action.CREATE);
+                File newFile = new File(elements[1], elements[2]);
+                break;
             case "UPDATE":
+                if (elements.length < 3) {
+                    Logger.warnLog("Please enter a valid command!");
+                    System.out.println("UPDATE <file ID> <new content>: update content for a file");
+                    return null;
+                }
                 message.setAction(ClientMessage.Action.UPDATE);
+                message.setFileID(Long.valueOf(elements[1]));
+                message.setNewContent(elements[2]);
                 break;
             case "SHARE":
+                if (elements.length < 3) {
+                    Logger.warnLog("Please enter a valid command!");
+                    System.out.println("SHARE <file ID> <username>: share a file with a user");
+                    return null;
+                }
                 message.setAction(ClientMessage.Action.SHARE);
+                message.setFileID(Long.valueOf(elements[1]));
+                message.setUsername(elements[2]);
                 break;
+            case "ACCEPT":
+                if (elements.length < 2) {
+                    Logger.warnLog("Please enter a valid command!");
+                    System.out.println("ACCEPT <file ID>: accept a file share invitation");
+                    return null;
+                }
+                message.setAction (ClientMessage.Action.ACCEPT);
+                message.setFileID(Long.valueOf(elements[1]));
+                // more....
+                break;
+            default:
+                Logger.warnLog("Please enter a valid command!");
+                System.out.println(instruction);
+                return null;
         }
         return message;
     }

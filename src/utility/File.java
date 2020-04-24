@@ -1,13 +1,24 @@
 package utility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class File {
     private long id; /** file id */
-    private int version; /** file version */
+    private int version = 1; /** file version */
     private String title; /** file title */
-    private String content; /** file content */
-    private List<String> owners; /** owners' usernames */
+    private String content = ""; /** file content */
+    private List<String> owners = new ArrayList<>(); /** owners' usernames */
+
+    public File (long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    public File (String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 
     public long getId() {
         return id;
@@ -30,6 +41,6 @@ public class File {
     }
 
     public void printInfo () {
-        System.out.println(this.title + "   v: " + this.version);
+        System.out.println("File ID: " + this.id + " Title: " + this.title + "   Version: " + this.version);
     }
 }
