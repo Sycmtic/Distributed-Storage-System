@@ -41,6 +41,10 @@ public class FileDB implements Serializable {
         for (long id : fileIds) {
             // -- TO DO handle the case if there is no specific file id in files
             list.add(files.get(id));
+            System.out.println(id);
+            if (files.get(id) == null) {
+                System.out.println("Got a null file!");
+            }
         }
         return list;
     }

@@ -45,9 +45,6 @@ public class ServerNode implements Server {
         servers = new HashMap<>();
         fileDB = new FileDB();
         accountDB = new AccountDB();
-
-        accountService = new AccountService(accountDB, fileDB);
-        fileService = new FileService(port, ports, previousVote, servers, failedServers, fileDB, accountDB);
     }
 
 
@@ -65,6 +62,10 @@ public class ServerNode implements Server {
                 return processFile(message);
             case OPEN:
                 return processOpen(message);
+            case SHARE:
+                shareService = new ShareService(accountDB, fileDB, message.getUsername(), message.getFileID());
+                ClientMessage response = shareService.process(message);
+                return response;
             default:
                 break;
         }
@@ -93,7 +94,7 @@ public class ServerNode implements Server {
         serverMessage = serverMessage.deepCopy();
         switch (serverMessage.getStatus()) {
             case PREPARED:
-                System.out.println("Prepared proposal requested from proposer on port:" + serverMessage.getSender());
+                Logger.infoLog("Prepared proposal requested from proposer on port:" + serverMessage.getSender());
                 if (serverMessage.getVote() > previousVote.getVote()) {
                     serverMessage.setStatus(ServerMessage.Status.PROMISE);
                     serverMessage.setAccountDB(previousVote.getAccountDB());
@@ -102,7 +103,7 @@ public class ServerNode implements Server {
                 }
                 break;
             case ACCEPTED:
-                System.out.println("Accepted proposal requested from proposer on port:" + serverMessage.getSender());
+                Logger.infoLog("Accepted proposal requested from proposer on port:" + serverMessage.getSender());
                 if (serverMessage.getVote() == previousVote.getVote()) {
                     accountDB = new AccountDB(serverMessage.getAccountDB());
                     fileDB = new FileDB(serverMessage.getFileDB());
@@ -374,9 +375,9 @@ public class ServerNode implements Server {
             Registry registry = LocateRegistry.createRegistry(port);
 
             registry.bind("Server", server);
-            System.out.println("server starts running at port: " + port);
+            Logger.infoLog("server starts running at port: " + port);
         } catch (Exception e) {
-            System.out.println(e.toString() + "unable to initialize the server");
+            Logger.warnLog(e.toString() + "unable to initialize the server");
         }
     }
 

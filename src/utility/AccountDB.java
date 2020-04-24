@@ -38,6 +38,9 @@ public class AccountDB implements Serializable {
      * @return account
      */
     public Account getAccount(String username) {
+        if (!accounts.containsKey(username)) {
+            return null;
+        }
         return accounts.get(username);
     }
 

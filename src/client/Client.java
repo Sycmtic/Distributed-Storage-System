@@ -94,7 +94,7 @@ public class Client {
                         if (response.getResult() == Message.Result.FAIL) {
                             Logger.warnLog("Not a valid username! Please check your username and try again.");
                         } else {
-                            System.out.println("here");
+                            System.out.println("here is account for " + response.getAccount().getUsername());
                             client.user = response.getAccount();
                         }
                     } catch (RemoteException e) {
@@ -118,7 +118,11 @@ public class Client {
                 System.out.println("There is no file under your account");
             } else {
                 for (File file : response.getFiles()) {
-                    file.printInfo();
+                    if (file == null) {
+                        System.out.println("null");
+                    }else {
+                        file.printInfo();
+                    }
                 }
             }
         } catch (RemoteException e) {
@@ -144,8 +148,16 @@ public class Client {
                     response.printMessage();
                     if (response.getResult() != Message.Result.FAIL) {
                         if (response.getAction() == ClientMessage.Action.LIST) {
-                            for (File file : response.getFiles()) {
-                                file.printInfo();
+                            if (response.getFiles().size() == 0) {
+                                System.out.println("There is no file under your account");
+                            }else {
+                                for (File file : response.getFiles()) {
+                                    if (file == null) {
+                                        System.out.println("null");
+                                    }else {
+                                        file.printInfo();
+                                    }
+                                }
                             }
                         } else if (response.getAction() == ClientMessage.Action.CREATE) {
                             client.user = response.getAccount();
