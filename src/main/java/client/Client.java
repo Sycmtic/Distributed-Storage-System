@@ -199,7 +199,12 @@ public class Client {
                 break;
             case "OPEN":
                 message.setAction(ClientMessage.Action.OPEN);
-                message.setFileID(Long.valueOf(elements[1]));
+                try {
+                    message.setFileID(Long.valueOf(elements[1]));
+                } catch (NumberFormatException e) {
+                    Logger.warnLog("Please enter a valid file id");
+                    return null;
+                }
                 break;
             case "CREATE":
                 if (elements.length < 3) {
@@ -218,7 +223,12 @@ public class Client {
                     return null;
                 }
                 message.setAction(ClientMessage.Action.UPDATE);
-                message.setFileID(Long.valueOf(elements[1]));
+                try {
+                    message.setFileID(Long.valueOf(elements[1]));
+                } catch (NumberFormatException e) {
+                    Logger.warnLog("Please enter a valid file id");
+                    return null;
+                }
                 message.setNewContent(elements[2]);
                 break;
             case "SHARE":
@@ -228,7 +238,12 @@ public class Client {
                     return null;
                 }
                 message.setAction(ClientMessage.Action.SHARE);
-                message.setFileID(Long.valueOf(elements[1]));
+                try {
+                    message.setFileID(Long.valueOf(elements[1]));
+                } catch (NumberFormatException e) {
+                    Logger.warnLog("Please enter a valid file id");
+                    return null;
+                }
                 message.setUsername(elements[2]);
                 break;
             default:

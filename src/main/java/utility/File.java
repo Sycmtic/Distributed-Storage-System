@@ -34,6 +34,10 @@ public class File implements Serializable {
         return version;
     }
 
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
     public String getTitle() {
         return title;
     }

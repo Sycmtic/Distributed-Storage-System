@@ -334,7 +334,12 @@ public class ServerNode implements Server {
             proposal.getAccountDB().getAccount(clientMessage.getAccount().getUsername()).addFile(fileId);
         } else if (clientMessage.getAction() == ClientMessage.Action.UPDATE) {
             File file = proposal.getFileDB().getFileById(clientMessage.getFileID());
-            file.setContent(clientMessage.getNewContent());
+            if (file == null) {
+                clientMessage.setResult(Message.Result.FAIL);
+            } else {
+                file.setContent(clientMessage.getNewContent());
+                file.setVersion(file.getVersion() + 1);
+            }
         } else if (clientMessage.getAction() == ClientMessage.Action.SHARE) {
             proposal.getAccountDB().getAccount(clientMessage.getUsername()).addFile(clientMessage.getFileID());
             proposal.getFileDB().getFileById(clientMessage.getFileID()).getOwners().add(clientMessage.getUsername());
@@ -359,7 +364,6 @@ public class ServerNode implements Server {
         previousVote.setFileDB(proposal.getFileDB());
         previousVote.setAccountDB(proposal.getAccountDB());
         clientMessage.setAccount(accountDB.getAccount(clientMessage.getAccount().getUsername()));
-        clientMessage.setResult(Message.Result.SUCCESS);
         return clientMessage;
     }
 
