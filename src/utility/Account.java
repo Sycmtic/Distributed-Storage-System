@@ -26,6 +26,9 @@ public class Account implements Serializable {
     }
 
     public void addFile(long fileId) {
+        if(files == null) {
+            files = new ArrayList<>();
+        }
         files.add(fileId);
     }
 }

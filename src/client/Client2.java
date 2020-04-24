@@ -10,7 +10,7 @@ import java.rmi.registry.LocateRegistry;
 import java.util.*;
 import java.util.Scanner;
 
-public class Client {
+public class Client2 {
     final static String instruction = "Please type your request...\n" +
             "LIST: list your files\n" +
             "CREATE <file title> <file content>: create a file with a title and content\n" +
@@ -24,9 +24,9 @@ public class Client {
     private Server server;
     private Set<Long> receiving = new HashSet<>();
 
-    public Client () {}
+    public Client2 () {}
 
-    public Client (String host, int port) {
+    public Client2 (String host, int port) {
         this.host = host;
         this.port = port;
     }
@@ -52,7 +52,7 @@ public class Client {
         String host = args[0];
         int port = Integer.parseInt(args[1]);
 
-        Client client = new Client(host, port);
+        Client2 client = new Client2(host, port);
         try{
             client.connect();
         } catch (Exception e) {
