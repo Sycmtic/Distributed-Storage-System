@@ -41,6 +41,7 @@ public class Receiver implements Runnable {
             //Register the listener object with receiver
             Listener listener = new Listener();
             receiver.setMessageListener(listener);
+            Logger.infoLog("Listening to " + queueName);
             while(true) {
                 Thread.sleep(30 * 1000);
             }

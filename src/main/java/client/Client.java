@@ -22,7 +22,7 @@ public class Client {
     private int port;
     private Account user;
     private Server server;
-    private Set<Long> receiving = new HashSet<>();
+//    private Set<Long> receiving = new HashSet<>();
 
     public Client () {}
 
@@ -78,6 +78,9 @@ public class Client {
                         } else {
                             Logger.infoLog("Successfully logged in.");
                             client.user = response.getAccount();
+                            Thread t = new Thread(new Receiver(client.user.getUsername()));
+                            t.start();
+//                            client.receiving.add(response.getFileID());
                         }
                     } catch (RemoteException e) {
                         e.printStackTrace();
@@ -121,9 +124,9 @@ public class Client {
                         System.out.println("null");
                     }else {
                         file.printInfo();
-                        Thread t = new Thread(new Receiver("file" + file.getId()));
-                        t.start();
-                        client.receiving.add(file.getId());
+//                        Thread t = new Thread(new Receiver("file" + file.getId()));
+//                        t.start();
+//                        client.receiving.add(file.getId());
                     }
                 }
             }
@@ -163,9 +166,9 @@ public class Client {
                             }
                         } else if (response.getAction() == ClientMessage.Action.CREATE) {
                             client.user = response.getAccount();
-                            Thread t = new Thread(new Receiver("file" + response.getFileID()));
-                            t.start();
-                            client.receiving.add(response.getFileID());
+//                            Thread t = new Thread(new Receiver("file" + response.getFileID()));
+//                            t.start();
+//                            client.receiving.add(response.getFileID());
                         } else {
                             Logger.infoLog(response.getErrorMessage());
                         }
@@ -173,12 +176,12 @@ public class Client {
                 } catch (RemoteException e) {
                     Logger.warnLog("Client send request error!\n" + e.getMessage());
                 }
-            } else {
-                if (!client.receiving.contains(request.getFileID())) {
-                    Thread t = new Thread(new Receiver("file" + request.getFileID()));
-                    t.start();
-                    client.receiving.add(request.getFileID());
-                }
+//            } else {
+//                if (!client.receiving.contains(request.getFileID())) {
+//                    Thread t = new Thread(new Receiver("file" + request.getFileID()));
+//                    t.start();
+//                    client.receiving.add(request.getFileID());
+//                }
             }
         }
     }

@@ -10,38 +10,31 @@
          <entry name="myConnectionFactory" />
       </entries>
    </connection-factory>
-   <queue name="file100001">
-      <entry name="file100001" />
+   <queue name="user1">
+      <entry name="user1" />
    </queue>
-   <queue name="file100002">
-      <entry name="file100002" />
+   <queue name="user2">
+      <entry name="user2" />
    </queue>
-   <queue name="file100003">
-      <entry name="file100003" />
+   <queue name="user3">
+      <entry name="user3" />
    </queue>
-   <queue name="file100004">
-      <entry name="file100004" />
+   <queue name="user4">
+      <entry name="user4" />
    </queue>
-   <queue name="file100005">
-      <entry name="file100005" />
+   <queue name="user5">
+      <entry name="user5" />
    </queue>
-   <queue name="file100006">
-      <entry name="file100006" />
+   <queue name="melissa">
+      <entry name="melissa" />
    </queue>
-   <queue name="file100007">
-      <entry name="file100007" />
+   <queue name="mmmmel">
+      <entry name="mmmmel" />
    </queue>
-   <queue name="file100008">
-      <entry name="file100008" />
+   <queue name="yongle">
+      <entry name="yongle" />
    </queue>
-   <queue name="file100009">
-      <entry name="file100009" />
+   <queue name="muhan">
+      <entry name="muhan" />
    </queue>
-   <queue name="file100010">
-      <entry name="file100010" />
-   </queue>
-   <queue name="file100011">
-      <entry name="file100011" />
-   </queue>
-
 </configuration>

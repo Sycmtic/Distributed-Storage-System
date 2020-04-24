@@ -17,7 +17,7 @@ public class NotificationService {
     /**
      * After share a file with another user, a message queue named by this file ID is created
      */
-    public void sendNotification (String message, long fileID) {
+    public void sendNotification (String message, String username) {
         try {
             Map<String, Object> connectionParams = new HashMap<String, Object>();
             connectionParams.put(TransportConstants.PORT_PROP_NAME, 5445);
@@ -33,7 +33,7 @@ public class NotificationService {
             //Create queue session
             QueueSession queueSess = queueConn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
             //Get the Queue object
-            Queue queue = HornetQJMSClient.createQueue(String.valueOf("file" + fileID));
+            Queue queue = HornetQJMSClient.createQueue(String.valueOf(username));
             //Create QueueSender object
             QueueSender sender = queueSess.createSender(queue);
             //Create TextMessage object

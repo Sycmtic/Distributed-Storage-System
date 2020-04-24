@@ -61,12 +61,12 @@ public class ServerNode implements Server {
                 return fileService.processList(message);
             case CREATE:
                 response = fileService.process(message);
-                notificationService.sendNotification("File " + message.getFile().getTitle() + " is created for you", response.getFileID());
+                notificationService.sendNotification("File " + message.getFile().getTitle() + " is created for you", message.getAccount().getUsername());
                 return response;
             case SHARE:
                 shareService = new ShareService(accountDB, fileDB, message.getUsername(), message.getFileID());
                 response = shareService.process(message);
-                notificationService.sendNotification("File " + message.getFileID() + " is shared with you", response.getFileID());
+                notificationService.sendNotification("File " + message.getFileID() + " is shared with you", message.getUsername());
                 return response;
             default:
                 break;
