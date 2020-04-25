@@ -6,9 +6,9 @@ Register a queue name as your username on hornetq-jms.xml for notification servi
 
 For example:
 
-   \<queue name="mmmmel"\><br />
-      > \<entry name="mmmmel" /\><br />
-   \</queue\><br />
+   \<queue name="mmmmel"\>
+      \<entry name="mmmmel" /\>
+   \</queue\>
 
 ## Running:
 run with jar files:<br />
