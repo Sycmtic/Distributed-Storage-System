@@ -6,9 +6,9 @@ Register a queue name as your username on hornetq-jms.xml for notification servi
 
 For example:
 
-   \<queue name="mmmmel"\>
-      \<entry name="mmmmel" /\>
-   \</queue\>
+   \<queue name="mmmmel"\><br />
+      \<entry name="mmmmel" /\><br />
+   \</queue\><br />
 
 ## Running:
 run with jar files:<br />
@@ -32,15 +32,3 @@ on the client console, run command "login" or "signup"<br />
 run with java files or IDE:<br />
 1. resigter the username you want to signup in hornetq-jms.xml (see Preparation)<br />
 2. same step as "run with jar files"<br />
-
-## Function:
-
-client can check what file he/she owns
-
-client can create a file
-
-client can change a file (let's just change title for now)
-
-client can share a file with another client
-
-change of a file should be notified with all related clients
